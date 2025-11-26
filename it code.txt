@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Travel Diaries</title>
+
+<!-- BOOTSTRAP 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<!-- Cute Font -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background: #fefefe;
+        font-family: 'Quicksand', sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* Custom scroll bar */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #d4d4d4;
+        border-radius: 10px;
+    }
+
+    .left-side {
+        background: url(IMG_3231.jpg) center/cover no-repeat;
+        min-height: 100vh;
+        padding: 30px;
+        position: relative;
+    }
+    
+    .blur-bg {
+    background: url(IMG_3231.jpg) center/cover no-repeat;
+    filter: blur(6px);
+    }
+
+    .sticker {
+        position: absolute;
+        width: 120px;
+        margin-left: 90px;
+    }
+
+    .photo-card {
+        width: 250px;
+        border-radius: 12px;
+        box-shadow: 0px 6px 14px rgba(0,0,0,0.25);
+        transform: rotate(-3deg);
+        margin-bottom: 30px;
+        margin-left: 20px;
+        background: white;
+        padding: 5px;
+    }
+
+    .pin {
+        position: absolute;
+        width: 40px;
+    }
+
+    .right-page {
+    background: url('whitebg.png') center/cover no-repeat;
+    padding: 40px;
+    border-left: 2px solid #dddddd;
+    min-height: 100vh;
+    position: relative;
+    }
+
+    .travel-title {
+        /* font-family: 'Fredoka One', sans-serif;
+        font-size: 3.5rem;
+        color: #ff8a8a;
+        letter-spacing: 2px; */
+        margin-bottom: 30px;
+    }
+
+    .star {
+        font-size: 2rem;
+        color: #ffd56e;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="container-fluid">
+<div class="row">
+
+    <!-- LEFT SECTION -->
+    <div class="col-md-6 left-side">
+        <br>
+
+        <!-- Search bar -->
+       <div class="form-floating mb-3">
+            <input
+                type="text"
+                class="form-control"
+                name="search1"
+                id="search1"
+                placeholder="Search"
+            />
+
+            <label for="search1">Search</label>
+        </div>
+
+        
+        <br>
+
+
+        <!-- PINS and SIGNS -->
+        <img src="pinbg1.png" class="sticker" style="top: 240px; left: 240px; transform: scaleX(-1); width: 25%">
+        <img src="pin3bg.png" class="sticker" style="top: 100 px; bottom: 345px; left: 90px; width: 35%;">
+        <img src="travelheartbg.png" class="sticker" style="top: 50 px; bottom: 650px; left: 335px; width: 40%;">
+        <img src="travelsignbg.png" class="sticker" style=" bottom: -65px; left: 230px; width: 63%;">
+        
+
+        <br>
+        <br>
+
+        <!-- Collage Photos -->
+        <div style="position: relative; margin-left: 30px;">
+            <img src="https://placehold.co/400x250" class="photo-card" style="transform: rotate(-8deg);">
+            <img src="https://i.imgur.com/oGZp9z7.png" class="pin" style="top: 10px; left: 15px;">
+        </div>
+
+        <div style="position: relative; margin-left: 330px;">
+            <img src="https://placehold.co/350x220" class="photo-card" style="transform: rotate(0deg);">
+            <img src="https://i.imgur.com/oGZp9z7.png" class="pin" style="top: 5px; left: 20px;">
+        </div>
+
+        <div style="position: relative; margin-left: 30px;">
+            <img src="https://placehold.co/300x200" class="photo-card" style="transform: rotate(8deg);">
+            <img src="https://i.imgur.com/oGZp9z7.png" class="pin" style="top: 5px; left: 20px;">
+        </div>
+
+    </div>
+
+    <!-- RIGHT SECTION -->
+    <div class="col-md-6 right-page">
+
+        <!-- Icons -->
+        <div class="d-flex justify-content-end gap-4">
+            <i class="bi bi-house fs-3"></i>
+            <i class="bi bi-chat-dots fs-3"></i>
+            <i class="bi bi-info-circle fs-3"></i>
+        </div>
+
+        <!-- Title -->
+        <div class="travel-title">
+            <!-- TRAVEL <span class="star">*</span><br> DIARIES <span class="star">*</span> -->
+             <img src="traveldiariesbg.png" style="top: 90 px; bottom: 190px; margin-left: 50px; width: 80%;">
+        </div>
+
+        <!-- Divider -->
+        <hr style="border: 1px solid #000;">
+
+        <!-- Right Page Images -->
+        <div class="row mt-4">
+
+            <div class="col-6 position-relative">
+                <img src="https://placehold.co/400x250" class="img-fluid mb-3">
+                <img src="https://i.imgur.com/oGZp9z7.png" class="pin" style="top: 10px; left: 10px;">
+            </div>
+
+            <div class="col-6">
+                <div class="position-relative mb-3">
+                    <img src="https://placehold.co/350x200" class="img-fluid">
+                    <img src="https://i.imgur.com/oGZp9z7.png" class="pin" style="top: 10px; left: 10px;">
+                </div>
+                <img src="https://placehold.co/350x200" class="img-fluid">
+            </div>
+
+        </div>
+
+        <!-- Bottom Sticker -->
+        <img src="https://i.imgur.com/tbtfjRW.png" style="width:120px; margin-top:30px;">
+
+    </div>
+
+</div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Diaries</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        /* --- 1. BACKGROUND & BASICS --- */
+        body {
+            /* Fixed background that stays in place while you scroll */
+            background: url('newbg.jpg') top left / 100% 100% no-repeat fixed;
+            font-family: 'Quicksand', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* --- 2. CUSTOM COLORS --- */
+        .text-brown { color: #3f2a20 !important; }
+        .border-brown { border-color: #5c4033 !important; }
+        
+        .bg-beige-glass {
+            background-color: rgba(225, 212, 192, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- 3. NAVBAR STYLING --- */
+        .navbar {
+            transition: background-color 0.4s ease, padding 0.4s ease;
+        }
+
+        .nav-link {
+            position: relative;
+            color: #3f2a20 !important;
+            font-weight: 700;
+            margin-left: 15px; 
+            margin-right: 15px;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #5c4033;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* --- 4. FLOATING LABEL CUSTOMIZATION --- */
+        .form-floating > label::after {
+            background-color: transparent !important; 
+        }
+        .form-floating > .form-control {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #5c4033;
+            color: #3f2a20;
+            font-weight: bold;
+        }
+        .form-floating > .form-control:focus {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 0.25rem rgba(92, 64, 51, 0.25);
+        }
+        .form-floating > label {
+            color: #5c4033;
+        }
+
+        /* --- 5. MODAL & CARD STYLE --- */
+        .modal-content, .custom-card {
+            background-color: rgba(225, 212, 192, 0.90); /* Glassy Beige */
+            border: 2px solid #5c4033;
+            color: #3f2a20;
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top pt-3" id="mainNavbar">
+        <div class="container-fluid px-4">
+            
+            <button class="navbar-toggler border-brown" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                
+                <ul class="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Adventures
+                        </a>
+                        <ul class="dropdown-menu bg-beige-glass border-brown">
+                            <li><a class="dropdown-item text-brown fw-bold" href="#">Beach Trips</a></li>
+                            <li><a class="dropdown-item text-brown fw-bold" href="#">Mountain Hikes</a></li>
+                            <li><hr class="dropdown-divider border-brown"></li>
+                            <li><a class="dropdown-item text-brown fw-bold" href="#">City Tours</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Gallery</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-floating">
+                        <input type="search" class="form-control rounded-pill" id="floatingSearch" placeholder="Search memories...">
+                        <label for="floatingSearch">Search...</label>
+                    </div>
+
+                    <i class="bi bi-info-circle-fill fs-2 text-brown" 
+                       role="button" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#aboutModal" 
+                       style="cursor: pointer; transition: transform 0.2s;"
+                       onmouseover="this.style.transform='scale(1.1)'"
+                       onmouseout="this.style.transform='scale(1)'">
+                    </i>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 100vh; padding-bottom: 100px;">
+        
+        <div class="row">
+            <div class="col-md-5 ms-auto">
+                
+                <div class="card custom-card mb-5 rounded-4 shadow-lg p-3">
+                    <img src="startpic.jpg" class="card-img-top rounded-4 mb-3" alt="Memory Photo">
+                    
+                    <div class="card-body">
+                        <h3 class="fw-bold font-monospace mb-2" style="font-family: 'Fredoka One';">The Beginning</h3>
+                        <p class="fs-5 lh-sm">
+                            This is where our journey started! The view was incredible, and we couldn't stop taking photos. Can't wait for the next adventure.
+                        </p>
+                        <div class="text-end text-brown opacity-75 fw-bold small">
+                            <i class="bi bi-geo-alt-fill"></i> Tagaytay
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card custom-card mb-5 rounded-4 shadow-lg p-3">
+                    <img src="startpic2.jpg" class="card-img-top rounded-4 mb-3" alt="Memory Photo">
+                    <div class="card-body">
+                        <h3 class="fw-bold font-monospace mb-2" style="font-family: 'Fredoka One';">Roadtrip Vibes</h3>
+                        <p class="fs-5 lh-sm">
+                            Just enjoying the ride with the best crew. 
+                        </p>
+                        <div class="text-end text-brown opacity-75 fw-bold small">
+                            <i class="bi bi-geo-alt-fill"></i> People's Park in the Sky, Tagaytay
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="aboutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-brown">
+                    <h1 class="modal-title fs-5 fw-bold font-monospace">
+                        <i class="bi bi-motorcycle me-2"></i>About Us
+                    </h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                
+                <div class="modal-body text-center">
+                    <h3 class="mb-3 fw-bold">Travel Diaries</h3>
+                    <p class="fs-5">
+                        Welcome to our digital scrapbook! <br>
+                        Explore our adventures, pins, and memories.
+                    </p>
+                    <hr class="border-brown opacity-50">
+                    <p class="small fw-bold">CREATED BY:</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <span class="badge bg-white text-brown border border-brown p-2">Yves</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">JM</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">Aliyah</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">Althea</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">Elaine</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const navbar = document.getElementById('mainNavbar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-beige-glass');
+                navbar.classList.remove('pt-3');
+                navbar.classList.add('shadow'); 
+            } else {
+                navbar.classList.remove('bg-beige-glass');
+                navbar.classList.add('pt-3');
+                navbar.classList.remove('shadow');
+            }
+        });
+    </script>
+
+</body>
+</html>

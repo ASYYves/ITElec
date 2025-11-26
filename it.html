@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Diaries</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        /* --- 1. GLOBAL STYLES --- */
+        body {
+            background: url('newbg.jpg') top left / cover no-repeat fixed;
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .text-brown { color: #3f2a20 !important; }
+        .border-brown { border-color: #5c4033 !important; }
+        
+        .bg-beige-glass {
+            background-color: rgba(225, 212, 192, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- 2. NAVBAR --- */
+        .navbar { transition: background-color 0.4s ease, padding 0.4s ease; }
+        
+        .nav-link {
+            color: #3f2a20 !important;
+            font-weight: 700;
+            margin: 0 15px;
+            position: relative;
+        }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px;
+            bottom: 0; left: 0; background-color: #5c4033; transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .dropdown-toggle::after {
+            border: none !important;      /* Removes the triangle shape */
+            margin-left: 0 !important;    /* Removes the extra space */
+            content: "" !important;       /* Resets it so your underline works */
+        }
+
+        /* --- 3. FLOATING SEARCH --- */
+        .form-floating > .form-control {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid #5c4033;
+            color: #3f2a20;
+            font-weight: bold;
+        }
+        .form-floating > .form-control:focus {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 0.25rem rgba(92, 64, 51, 0.25);
+        }
+        .form-floating > label::after { background-color: transparent !important; }
+        .form-floating > label { color: #5c4033; }
+
+        /* --- 4. TOP FEED CARDS --- */
+        .custom-card {
+            background-color: rgba(225, 212, 192, 0.90);
+            border: 2px solid #5c4033;
+            color: #3f2a20;
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- 5. SCROLL SECTION --- */
+        .brown-section {
+            background-color: #5c4033;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+            padding-top: 80px;
+            padding-bottom: 80px;
+            box-shadow: 0 -20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* --- 6. DIARY & CAROUSEL STYLES (UPDATED) --- */
+        .diary-entry-box {
+            background: #fdfbf7;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 80px;
+        }
+
+        .paint-title-box {
+            border: 3px solid #000;
+            background: white;
+            padding: 10px 30px;
+            display: inline-block;
+            font-family: 'Fredoka One', cursive;
+            margin-bottom: 20px;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        /* THE FIX: Absolute Positioning for Carousel */
+        .paint-image-box {
+            border: 4px solid #000;
+            background: black; /* Black background like a TV screen */
+            margin-bottom: 20px;
+            position: relative; /* Essential for absolute children */
+            height: 450px;      /* Fixed Height prevents page jumping */
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .carousel-img {
+            position: absolute; /* Stack images on top of each other */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* CONTAIN: Ensures the whole image fits without cutting */
+            object-fit: contain; 
+            opacity: 0; /* Hidden by default */
+            transition: opacity 2s ease-in-out; /* Smooth fade effect */
+        }
+        
+        /* Class to show the image */
+        .carousel-img.active {
+            opacity: 1;
+        }
+
+        .paint-date-box {
+            border: 3px solid #000;
+            background: white;
+            padding: 5px 40px;
+            display: inline-block;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .paint-desc-box {
+            border: 3px dashed #000;
+            background: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        /* --- 7. GALLERY --- */
+        .gallery-img {
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid #fff;
+            transition: transform 0.2s;
+        }
+        .gallery-img:hover {
+            transform: scale(1.05);
+            border-color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top pt-3" id="mainNavbar">
+        <div class="container-fluid px-4">
+            <button class="navbar-toggler border-brown" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Cities</a>
+                        <ul class="dropdown-menu bg-beige-glass border-brown">
+                            <li><a class="dropdown-item text-brown fw-bold" href="#cavite">Cavite</a></li>
+                            <li><a class="dropdown-item text-brown fw-bold" href="#batangas">Batangas</a></li>
+                            <li><a class="dropdown-item text-brown fw-bold" href="#rizal">Rizal</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-floating">
+                        <input type="search" class="form-control rounded-pill" id="locationSearch" placeholder="Search">
+                        <label for="locationSearch">Search</label>
+                    </div>
+                    <i class="bi bi-info-circle-fill fs-2 text-brown" role="button" data-bs-toggle="modal" data-bs-target="#aboutModal"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-top: 100vh; padding-bottom: 150px;">
+        <div class="row">
+            <div class="col-md-5 ms-auto">
+                <div class="card custom-card mb-5 rounded-4 shadow-lg p-3">
+                    <img src="startpic.jpg" class="card-img-top rounded-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="fw-bold font-monospace mb-2" style="font-family: 'Fredoka One';">The Beginning</h3>
+                        <p class="fs-5 lh-sm">Off we go! The car is packed.</p>
+                        <div class="text-end text-brown opacity-75 fw-bold small">
+                            <i class="bi bi-geo-alt-fill"></i> People's Park in the Sky
+                        </div>
+                    </div>
+                </div>
+                <div class="card custom-card mb-5 rounded-4 shadow-lg p-3">
+                    <img src="startpic3.jpg" class="card-img-top rounded-4 mb-3">
+                    <div class="card-body">
+                        <h3 class="fw-bold font-monospace mb-2" style="font-family: 'Fredoka One';">Coffee Stop</h3>
+                        <p class="fs-5 lh-sm">First stop for some much needed caffeine.</p>
+                        <div class="text-end text-brown opacity-75 fw-bold small">
+                            <i class="bi bi-geo-alt-fill"></i> Kaybiang Tunnel
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="brown-section">
+        <div class="container">
+
+            <div id="cavite" class="text-center pb-4">
+                <h1 class="text-white display-1" style="font-family: 'Fredoka One', cursive; text-shadow: 5px 5px 0px rgba(0,0,0,0.3); letter-spacing: 5px;">
+                    CAVITE
+                </h1>
+                <div class="bg-white mx-auto rounded-pill" style="width: 100px; height: 6px; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);"></div>
+            </div>
+
+            
+                <div id="tagaytay" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Tagaytay City, Cavite</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="cavpic.jpg" class="carousel-img active">
+                        <img src="cavpic2.jpg" class="carousel-img">
+                        <img src="cavpic3.jpg" class="carousel-img">
+                        <img src="cavpic4.jpg" class="carousel-img">
+                        <img src="cavpic5.jpg" class="carousel-img">
+                        <img src="cavpic6.jpg" class="carousel-img">
+                    </div>
+
+                    <div class="paint-date-box">May 19, 2025 | People's Park in the Sky</div>
+                    <div class="paint-desc-box">
+                        <strong>Dear Diary,</strong><br><br>
+                        The wind was so cold today! We went to the grove and rode horses. 
+                    </div>
+                </div>
+
+                <div id="svd" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Tagaytay City, Cavite</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="svdpic.jpg" class="carousel-img active">
+                        <img src="svdpic2.jpg" class="carousel-img">
+                        <img src="svdpic3.jpg" class="carousel-img">
+                        <img src="svdpic4.jpg" class="carousel-img">
+                    </div>
+
+                    <div class="paint-date-box">September 30, 2025 | SVD Farm</div>
+                    <div class="paint-desc-box">
+                        <strong>A quick getaway from the bustling urban city.</strong><br><br>
+                        Tagaytay is known to be a quick and easy spot to visit during the weekends and holidays. 
+                        The of approximately 32km is just the right amount of throttle therapy and relaxation to relieve you from school or corporate stress. 
+                        Various tourist spots from Palace in the sky, SVD Farm, Picnic Grove, Mahogany Market, and etc always welcome both locals and tourists in their care. 
+                        It's up to you to choose which spot will fill your adventurous needs.
+                    </div>
+                </div>
+
+
+                <div id="kaybiang" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Maragondon, Cavite</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="kaypic.jpg" class="carousel-img active">
+                        <img src="kaypic2.jpg" class="carousel-img">
+                        <img src="kaypic3.jpg" class="carousel-img">
+                        <img src="kaypic4.jpg" class="carousel-img">
+                        <img src="kaypic5.jpg" class="carousel-img">
+                        <img src="kaypic6.jpg" class="carousel-img">
+                        <img src="kaypic7.jpg" class="carousel-img">
+                        <img src="kaypic8.jpg" class="carousel-img">
+                        <img src="kaypic9.jpg" class="carousel-img">
+                        <img src="kaypic10.jpg" class="carousel-img">
+                        <img src="kaypic11.jpg" class="carousel-img">
+                        <img src="kaypic12.jpg" class="carousel-img">
+                        <img src="kaypic13.jpg" class="carousel-img">
+                        <img src="kaypic14.jpg" class="carousel-img">
+                    </div>
+
+                    <div class="paint-date-box">October 10, 2025 | Kaybiang Tunnel</div>
+                    <div class="paint-desc-box">
+                        <strong>The Riders Destination of the South.</strong><br><br>
+                        Kaybiang tunnel is the so called Riders Destination, as the road to get there is a beginner friendly road for sprouting riders. 
+                        Cavite often have easy going roads, and a lot of straightaways that makes the ride smooth and peaceful. The only winding road that you'll experience is at the end, before reaching Kaybiang tunnel. 
+                        Make sure to gas up before making your way up, as there are no gas station available further up the road. 
+                         will ensure that you'll have a safe and hassle free ride. With that in mind, the road up the mountain greets you with cold breeze, greenish ambient scent that revitalizes you making a "nature trip" experience. 
+                        You'll get a chance to encounter native wildlife prior to arriving at the tunnel, which symbolizes the co-existence of nature and infrastructure.
+                    </div>
+                </div>
+            
+
+                <br>
+
+            <div id="batangas" class="text-center pb-4">
+                <h1 class="text-white display-1" style="font-family: 'Fredoka One', cursive; text-shadow: 5px 5px 0px rgba(0,0,0,0.3); letter-spacing: 5px;">
+                    BATANGAS
+                </h1>
+                <div class="bg-white mx-auto rounded-pill" style="width: 100px; height: 6px; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);"></div>
+            </div>    
+
+            <div id = "laurel">
+                <div id="simbahang bato" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Laurel, Batangas</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="laupic.jpg" class="carousel-img active">
+                        <img src="laupic2.jpg" class="carousel-img">
+                        <img src="laupic3.jpg" class="carousel-img">
+                        <img src="laupic4.jpg" class="carousel-img">
+                        <img src="laupic5.jpg" class="carousel-img">
+                        <img src="laupic6.jpg" class="carousel-img">
+                        <img src="laupic7.jpg" class="carousel-img">
+                        <img src="laupic8.jpg" class="carousel-img">
+                        <img src="laupic9.jpg" class="carousel-img">
+                        <img src="laupic10.jpg" class="carousel-img">
+                        <img src="laupic11.jpg" class="carousel-img">
+                        <img src="laupic12.jpg" class="carousel-img">
+                    </div>
+
+                    <div class="paint-date-box">September 30, 2025 | Simbahang Bato</div>
+                    <div class="paint-desc-box">
+                        <strong>A scenic ride to a sacred destination.</strong><br><br>
+                        Sharing the same route to Tagaytay, we'll head down to the winding road of Sampaloc Road. 
+                        The scenic drive offers a unique refreshing experience as the cool breeze and green floods your five senses as you cruise down the road. 
+                        A couple of spots offers very photogenic scenes that can prove to be Instagram worthy even for your pickiest followers. 
+                        But going down further, we exit to Talisay, and head our way to Laurel, Batangas. 
+                        Even though the cool breeze no longer greets us, what took its place is the majestic view of Taal Lake, and Taal Volcano that makes the trip worth it. 
+                        Aside from the quiet and peaceful atmosphere, Simbahang Bato gives off a serene feeling that contributes to sacred value as a place of worship. 
+                    </div>
+                </div>
+            </div>
+
+
+            <div id = "sto. tomas">
+                <div id="padre pio" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Santo Tomas, Batangas</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="piopic.jpg" class="carousel-img active">
+                        <img src="piopic2.jpg" class="carousel-img">
+                        <img src="piopic3.jpg" class="carousel-img">
+                        <img src="piopic4.jpg" class="carousel-img">
+                        <img src="piopic5.jpg" class="carousel-img">
+                    </div>
+
+                    <div class="paint-date-box">September 30, 2025 | National Shrine of Saint Padre Pio</div>
+                    <div class="paint-desc-box">
+                        <strong>A scenic ride to a sacred destination.</strong><br><br>
+                        Sharing the same route to Tagaytay, we'll head down to the winding road of Sampaloc Road. 
+                        The scenic drive offers a unique refreshing experience as the cool breeze and green floods your five senses as you cruise down the road. 
+                        A couple of spots offers very photogenic scenes that can prove to be Instagram worthy even for your pickiest followers. 
+                        But going down further, we exit to Talisay, and head our way to Laurel, Batangas. 
+                        Even though the cool breeze no longer greets us, what took its place is the majestic view of Taal Lake, and Taal Volcano that makes the trip worth it. 
+                        Aside from the quiet and peaceful atmosphere, Simbahang Bato gives off a serene feeling that contributes to sacred value as a place of worship. 
+                    </div>
+                </div>
+            </div>
+
+
+            <div id = "lobo">
+                <div id="malagundi" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Lobo, Batangas</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="lobopic.jpg" class="carousel-img active">
+                        <img src="lobopic2.jpg" class="carousel-img">
+                        <img src="lobopic3.jpg" class="carousel-img">
+                        <img src="lobopic4.jpg" class="carousel-img">
+                        <img src="lobopic5.jpg" class="carousel-img">
+                        <img src="lobopic6.jpg" class="carousel-img">
+                        <img src="lobopic7.jpg" class="carousel-img">
+                        <img src="lobopic8.jpg" class="carousel-img">
+                    </div>
+
+                    <div class="paint-date-box">November 15, 2025 | Malagundi Point</div>
+                    <div class="paint-desc-box">
+                        <strong>A hidden gem at the farthest point of the South</strong><br><br>
+                        This trip is not for the light hearted, as this ride not only challenges the rider's ability, but also the rider's vehicle. 
+                        Always ensure to pack properly and make sure that the motorcycle is in good condition before setting out. 
+                        The road to Malagundi Point offers various types of roads and road hazards that keeps the driver on edge. 
+                        However, you'll get the chance to visit various tourist destination, before reaching Malagundi Point. 
+                        The final stretch of the route is a lengthy offroad segment that challenges both the rider and the vehicles capabilities. 
+                        At the end of it all, it rewards you with the sound of the crashing waves, and humid breeze of the beach. 
+                        A true hidden gem away far away from the urban city and the farthest point of the south.
+                    </div>
+                </div>
+            </div>
+
+
+            <br>
+
+            <div id="rizal" class="text-center pb-4">
+                <h1 class="text-white display-1" style="font-family: 'Fredoka One', cursive; text-shadow: 5px 5px 0px rgba(0,0,0,0.3); letter-spacing: 5px;">
+                    RIZAL
+                </h1>
+                <div class="bg-white mx-auto rounded-pill" style="width: 100px; height: 6px; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);"></div>
+            </div>
+
+            <div id = "baras">
+                <div id="marilaque" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Baras, Rizal</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="marpic.jpg" class="carousel-img active">
+                        <img src="marpic2.jpg" class="carousel-img">
+                        <img src="marpic3.jpg" class="carousel-img">
+                        <img src="marpic4.jpg" class="carousel-img">
+                        <img src="marpic5.jpg" class="carousel-img">
+                        <img src="marpic6.jpg" class="carousel-img">
+                        <img src="marpic7.jpg" class="carousel-img">
+                    </div>
+
+                    <div class="paint-date-box">November 7, 2025 | MARILAQUE Highway</div>
+                    <div class="paint-desc-box">
+                        <strong>From the busy streets of the metro to the windy mountain road.</strong><br><br>
+                        The road to Marilaque stretches from  Marikina, Rizal, Laguna and Quezon. Hence, the name Marilaque. 
+                        You'll go through the busy streets of Muntinlupa to the gruelling traffic of Taguig. 
+                        But that's the beauty of this trip is that after a hellish drive, it rewards you at the end with winding roads with beautiful trees and picture perfect spots that pleases the eyes. 
+                        Though Marilaque holds the status of one of the accident prone spots in the Philippines, it is imperative that when traveling there always practice defensive driving. 
+                    </div>
+                </div>
+            </div>
+
+                <br>
+
+                <div id="coming" class="text-center pb-4">
+                <h1 class="text-white display-1" style="font-family: 'Fredoka One', cursive; text-shadow: 5px 5px 0px rgba(0,0,0,0.3); letter-spacing: 5px;">
+                    COMING SOON
+                </h1>
+                <div class="bg-white mx-auto rounded-pill" style="width: 100px; height: 6px; box-shadow: 2px 2px 0px rgba(0,0,0,0.2);"></div>
+            </div>
+
+            
+                <div id="ternate" class="text-center diary-entry-box">
+                    <div class="paint-title-box h2">Ternate, Cavite</div>
+
+                    <div class="paint-image-box auto-carousel">
+                        <img src="terpic.jpg" class="carousel-img active">
+                        <img src="terpic2.png" class="carousel-img">    
+                    </div>
+
+                    <div class="paint-date-box">December 2, 2025 | Katungkulan Beach Resort</div>
+                    <div class="paint-desc-box">
+                        <strong>Birthday Swimming</strong><br><br>
+                        Celebrating our birthdays with a quick dip at the beach.
+                    </div>
+                </div>
+
+            <div id="gallery" class="pt-5">
+                <h2 class="text-white text-center font-monospace mb-4 display-4" style="font-family: 'Fredoka One';">GALLERY</h2>
+                <div class="row g-3">
+
+                    <div class="col-6 col-md-3"><img src="startpic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="startpic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+
+                    <div class="col-6 col-md-3"><img src="cavpic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="cavpic2.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="cavpic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="cavpic4.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="cavpic5.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="cavpic6.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+
+                    <div class="col-6 col-md-3"><img src="svdpic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="svdpic2.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="svdpic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="svdpic4.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+
+                    <div class="col-6 col-md-3"><img src="kaypic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic2.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic4.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic5.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic6.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic7.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic8.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic9.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic10.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic11.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic12.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic13.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="kaypic14.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+
+                    <div class="col-6 col-md-3"><img src="laupic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic2.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic4.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic5.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic6.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic7.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic8.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic9.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic10.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic11.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="laupic12.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+
+                    <div class="col-6 col-md-3"><img src="piopic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="piopic2.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="piopic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="piopic4.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="piopic5.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+
+                    <div class="col-6 col-md-3"><img src="lobopic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="lobopic2.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="lobopic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="lobopic4.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="lobopic5.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="lobopic6.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="lobopic7.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="lobopic8.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+
+                    <div class="col-6 col-md-3"><img src="marpic.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="marpic2.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="marpic3.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="marpic4.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="marpic5.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="marpic6.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                    <div class="col-6 col-md-3"><img src="marpic7.jpg" class="img-fluid gallery-img w-100 rounded" onclick="openGallery(this)"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="aboutModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-brown">
+                    <h1 class="modal-title fs-5 fw-bold font-monospace"><i class="bi bi-motorcycle me-2"></i>About Us</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h3 class="mb-3 fw-bold">Travel Diaries</h3>
+                    <p class="fs-5">Welcome to our digital scrapbook!</p>
+                    <hr class="border-brown opacity-50">
+                    <p class="small fw-bold">CREATED BY:</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <span class="badge bg-white text-brown border border-brown p-2">Yves</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">JM</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">Aliyah</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">Althea</span>
+                        <span class="badge bg-white text-brown border border-brown p-2">Elaine</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="galleryModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body p-0 text-center position-relative">
+                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 p-2 bg-white rounded-circle" data-bs-dismiss="modal"></button>
+                    <img id="galleryModalImg" src="" class="img-fluid rounded border-4 border-white shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // 1. CAROUSEL SCRIPT (FIXED NO JUMPING)
+        const carousels = document.querySelectorAll('.auto-carousel');
+
+        carousels.forEach(carousel => {
+            const images = carousel.querySelectorAll('.carousel-img');
+            if (images.length === 0) return;
+            
+            let currentIndex = 0;
+
+            setInterval(() => {
+                // Remove 'active' class from current image (fades out)
+                images[currentIndex].classList.remove('active');
+                
+                // Calculate next index
+                currentIndex = (currentIndex + 1) % images.length;
+                
+                // Add 'active' class to next image (fades in)
+                images[currentIndex].classList.add('active');
+            }, 5000); // 3 seconds per slide
+        });
+
+        // 2. NAVBAR SCROLL
+        const navbar = document.getElementById('mainNavbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-beige-glass');
+                navbar.classList.remove('pt-3');
+                navbar.classList.add('shadow'); 
+            } else {
+                navbar.classList.remove('bg-beige-glass');
+                navbar.classList.add('pt-3');
+                navbar.classList.remove('shadow');
+            }
+        });
+
+        // 3. SEARCH
+        const searchInput = document.getElementById('locationSearch');
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const term = this.value.toLowerCase().trim();
+                const targetSection = document.getElementById(term);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    alert('Location not found!');
+                }
+            }
+        });
+
+        // 4. GALLERY
+        function openGallery(imgElement) {
+            const modalImg = document.getElementById('galleryModalImg');
+            modalImg.src = imgElement.src; 
+            const myModal = new bootstrap.Modal(document.getElementById('galleryModal'));
+            myModal.show();
+        }
+    </script>
+
+</body>
+</html>
